@@ -3,11 +3,13 @@ import bodyParser from 'body-parser';
 import { Socket } from 'net';
 import { Server } from 'http';
 import { requestLogger } from './middlewares/request-logger';
+import { routes } from './index.routes';
 
 export const app = express();
 
 app.use(bodyParser.json());
 app.use(requestLogger);
+app.use('/api', routes);
 
 /**
  * TODO: Module 10 - Production-Ready Node.js Applications
