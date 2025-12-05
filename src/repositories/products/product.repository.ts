@@ -1,37 +1,55 @@
-import crypto from "crypto"
-
-import { products } from "../../data/products";
+import { Types } from "mongoose";
 import { ProductEntity } from "../../entities/product.entity";
+import Product from "../../models/Product";
 
-export function getAllProductsRepository () {
-    return products;
+export async function getAllProductsRepository (): Promise<ProductEntity[]> {
+    const products = await Product.find().lean();
+    return products.map(item => {
+        return { id: item._id.toString(), title: item.title, description: item.description, price: item.price }
+    });
 }
 
-export function getProductByIdRepository (productId: string): ProductEntity | undefined {
-    const productFound = products.find(product => product.id === productId);
-    if (!productFound) return undefined;
+export async function getProductByIdRepository (productId: string): Promise<ProductEntity | null> {
+    const productFound = await Product.findOne({ "_id": productId }).lean();
 
-    return productFound;
+    if (!productFound) return null;
+
+    return {
+        id: productFound._id.toString(),
+        title: productFound.title,
+        description: productFound.description,
+        price: productFound.price
+    }
 }
 
-export function createProductRepository (newProduct: Omit<ProductEntity, 'id'>): ProductEntity {
-    const myNewProduct: ProductEntity = { id: crypto.randomUUID(), ...newProduct };
-    products.push(myNewProduct); // *
-    return myNewProduct;
+export async function createProductRepository (newProduct: Omit<ProductEntity, 'id'>): Promise<ProductEntity> {
+
+    const myNewProduct = new Product(newProduct);
+    const response = await myNewProduct.save();
+
+    return {
+        id: response._id.toString(),
+        title: response.title,
+        description: response.description,
+        price: response.price
+    }
 }
 
-export function deleteProductByIdRepository (productId: string): boolean {
-    const productIndex = products.findIndex(product => product.id === productId);
-    if (productIndex === -1) return false;
-
-    products.splice(productIndex, 1);
-    return true;
+export async function deleteProductByIdRepository (productId: string): Promise<boolean> {
+    const deletedProduct = await Product.deleteOne({ "_id": productId });
+    if (deletedProduct.deletedCount === 0) return false
+    return true
 }
 
-export function updateProductRepository (productId: string, newValues : Partial<ProductEntity>): ProductEntity | undefined {
-    const productFound = products.find(product => product.id === productId);
+export async function updateProductRepository (productId: string, newValues : Partial<ProductEntity>): Promise<ProductEntity | null> {
+    const productUpdated = await Product.findOneAndUpdate({ "_id": productId }, newValues, { new: true }).lean();
+    
+    if (!productUpdated) return null;
 
-    if (!productFound) return undefined
-
-    return Object.assign(productFound, newValues);
+    return {
+        id: productUpdated._id.toString(),
+        title: productUpdated.title,
+        description: productUpdated.description,
+        price: productUpdated.price
+    };
 }

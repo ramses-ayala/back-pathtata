@@ -4,12 +4,14 @@ import { Socket } from 'net';
 import { Server } from 'http';
 import { requestLogger } from './middlewares/request-logger';
 import { routes } from './index.routes';
+import connectDB from './db/db-connection';
 
 export const app = express();
 
 app.use(bodyParser.json());
 app.use(requestLogger);
 app.use('/api', routes);
+connectDB(); // * call connection
 
 /**
  * TODO: Module 10 - Production-Ready Node.js Applications

@@ -4,16 +4,16 @@ import { createProductSchema, updateProductSchema } from "../../test/helpers/sch
 import Joi from "joi";
 
 
-export function getAllProductsService (): ProductEntity[] {
-    return getAllProductsRepository();
+export async function getAllProductsService (): Promise<ProductEntity[]> {
+    return await getAllProductsRepository();
 }
 
-export function getProductByIdService (productId: string): ProductEntity | undefined {
-    const product = getProductByIdRepository(productId);
+export async function getProductByIdService (productId: string): Promise<ProductEntity | null> {
+    const product = await getProductByIdRepository(productId);
     return product;
 }
 
-export function createProductService (incomingProduct: Omit<ProductEntity, 'id'>): ProductEntity | Joi.ValidationError {
+export async function createProductService (incomingProduct: Omit<ProductEntity, 'id'>): Promise<ProductEntity | Joi.ValidationError> {
 
     const myNewProduct = {  
         ...incomingProduct
@@ -21,15 +21,15 @@ export function createProductService (incomingProduct: Omit<ProductEntity, 'id'>
     const { error, value } = createProductSchema.validate(myNewProduct);
     if (error) throw error;
 
-    return createProductRepository(value);
+    return await createProductRepository(value);
 }
 
-export function updateProductService (productId: string, incomingProduct: Partial<ProductEntity>): ProductEntity | Joi.ValidationError | undefined {
+export async function updateProductService (productId: string, incomingProduct: Partial<ProductEntity>): Promise<ProductEntity | Joi.ValidationError | null> {
     const { error, value } = updateProductSchema.validate(incomingProduct);
     if (error) throw error;
-    return updateProductRepository(productId, value);
+    return await updateProductRepository(productId, value);
 }
 
-export function deleteProductService (productId: string): boolean {
-    return deleteProductByIdRepository(productId);
+export async function deleteProductService (productId: string): Promise<boolean> {
+    return await deleteProductByIdRepository(productId);
 }

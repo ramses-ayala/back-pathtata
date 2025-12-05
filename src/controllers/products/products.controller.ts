@@ -2,22 +2,24 @@ import { Request, Response } from "express"
 import { createProductService, deleteProductService, getAllProductsService, getProductByIdService, updateProductService } from "../../services/products/product.service"
 import Joi from "joi";
 
-export const getAllProductsController = (_: Request, res: Response) => {
+export const getAllProductsController = async (_: Request, res: Response) => {
     try {
-        const products = getAllProductsService();
+        const products = await getAllProductsService();
         res.status(200).json({
             data: products
         });    
     } catch (error) {
         console.error("Occured an error getting all products: ", error);
+        res.status(500).json({
+            error
+        });
     }
 }
 
-export const getProductByIdController = (req: Request, res: Response) => {
+export const getProductByIdController = async (req: Request, res: Response) => {
     const { id } = req.params;
-
     try {
-        const product = getProductByIdService(id);
+        const product = await getProductByIdService(id);
         if (!product) {
             res.status(404).json({
                 error: "Product not found"
@@ -35,7 +37,7 @@ export const getProductByIdController = (req: Request, res: Response) => {
     }
 }
 
-export const createProductController = (req: Request, res: Response) => {
+export const createProductController = async (req: Request, res: Response) => {
     const { title, description, price } = req.body;
 
     const product = {
@@ -45,7 +47,7 @@ export const createProductController = (req: Request, res: Response) => {
     };
 
     try {
-        const createdProduct = createProductService(product);
+        const createdProduct = await createProductService(product);
         res.status(201).json({ 
             data: createdProduct
         });
@@ -63,10 +65,10 @@ export const createProductController = (req: Request, res: Response) => {
     }
 }
 
-export const updateProductController = (req: Request, res: Response) => {
+export const updateProductController = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-        const updatedProduct = updateProductService(id, req.body);
+        const updatedProduct = await updateProductService(id, req.body);
         if (!updatedProduct) {
             res.status(404).json({
                 error: "Product not found"
@@ -91,10 +93,10 @@ export const updateProductController = (req: Request, res: Response) => {
     }
 }
 
-export const deleteProductController = (req: Request, res: Response) => {
+export const deleteProductController = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-        const wasDeletedProduct = deleteProductService(id);
+        const wasDeletedProduct = await deleteProductService(id);
         if (!wasDeletedProduct) {
             res.status(404).json({
                 error: "Product not found"
