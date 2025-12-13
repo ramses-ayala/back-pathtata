@@ -1,55 +1,57 @@
-import { Types } from "mongoose";
+import { wrap } from "@mikro-orm/core";
 import { ProductEntity } from "../../entities/product.entity";
-import Product from "../../models/Product";
+import { Product } from "../../models/Product";
+import { getEntityManager } from '../../mikroOrmInit';
+
 
 export async function getAllProductsRepository (): Promise<ProductEntity[]> {
-    const products = await Product.find().lean();
-    return products.map(item => {
-        return { id: item._id.toString(), title: item.title, description: item.description, price: item.price }
-    });
+    const entityManager = getEntityManager();
+    const em = entityManager.fork();
+    const allProducts = await em.find(Product, {});
+    return allProducts
 }
 
+
+
 export async function getProductByIdRepository (productId: string): Promise<ProductEntity | null> {
-    const productFound = await Product.findOne({ "_id": productId }).lean();
+    const entityManager = getEntityManager();
+    const em = entityManager.fork();
+    const productFound = await em.findOne(Product, { id: productId });
 
     if (!productFound) return null;
 
-    return {
-        id: productFound._id.toString(),
-        title: productFound.title,
-        description: productFound.description,
-        price: productFound.price
-    }
+    return productFound
 }
 
 export async function createProductRepository (newProduct: Omit<ProductEntity, 'id'>): Promise<ProductEntity> {
+    const { title, description, price } = newProduct;
 
-    const myNewProduct = new Product(newProduct);
-    const response = await myNewProduct.save();
+    const myNewProduct = new Product(title, description, price);
+    const entityManager = getEntityManager();
+    const em = entityManager.fork();
+    await em.persist(myNewProduct).flush();
 
-    return {
-        id: response._id.toString(),
-        title: response.title,
-        description: response.description,
-        price: response.price
-    }
+    return myNewProduct;
 }
 
 export async function deleteProductByIdRepository (productId: string): Promise<boolean> {
-    const deletedProduct = await Product.deleteOne({ "_id": productId });
-    if (deletedProduct.deletedCount === 0) return false
-    return true
+    const entityManager = getEntityManager();
+    const em = entityManager.fork();
+    const response = await em.nativeDelete(Product, { id: productId });
+    if (response) return true;
+    return false;
 }
 
-export async function updateProductRepository (productId: string, newValues : Partial<ProductEntity>): Promise<ProductEntity | null> {
-    const productUpdated = await Product.findOneAndUpdate({ "_id": productId }, newValues, { new: true }).lean();
-    
-    if (!productUpdated) return null;
 
-    return {
-        id: productUpdated._id.toString(),
-        title: productUpdated.title,
-        description: productUpdated.description,
-        price: productUpdated.price
-    };
+
+export async function updateProductRepository (productId: string, newValues : Partial<ProductEntity>): Promise<ProductEntity | null> {
+    const entityManager = getEntityManager();
+    const em = entityManager.fork();
+    const productFound = await em.findOne(Product, { id: productId });
+    
+    if (!productFound) return null;
+
+    const updatedProduct = wrap(productFound).assign(newValues);
+    await em.flush();
+    return updatedProduct
 }

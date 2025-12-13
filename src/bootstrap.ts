@@ -4,14 +4,13 @@ import { Socket } from 'net';
 import { Server } from 'http';
 import { requestLogger } from './middlewares/request-logger';
 import { routes } from './index.routes';
-import connectDB from './db/db-connection';
+import { initDB } from './mikroOrmInit';
 
 export const app = express();
 
 app.use(bodyParser.json());
 app.use(requestLogger);
 app.use('/api', routes);
-connectDB(); // * call connection
 
 /**
  * TODO: Module 10 - Production-Ready Node.js Applications
@@ -29,10 +28,18 @@ const PORT = 8000;
  * for graceful shutdown.
  * @returns {Server} The HTTP server instance.
  */
-export const bootstrap = () => {
-  const server = app.listen(PORT, () => {
-    console.log(`Server is started on port ${PORT}`);
-  });
+export const bootstrap = async () => {
+  let server;
+
+  try {
+    await initDB();
+    server = app.listen(PORT, () => {
+      console.log(`Server is started on port ${PORT}`);
+    });  
+  } catch (error) {
+    console.error('Error al conectar con la BD: ', error);
+  }
+  
 
   // TODO: Module 10 - Production-Ready Node.js Applications
   // Track new connections to the server

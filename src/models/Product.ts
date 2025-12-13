@@ -1,12 +1,25 @@
-import mongoose from "mongoose";
-import { ProductEntity } from "../entities/product.entity";
+import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { v4 } from "uuid";
 
-type fd = Omit<ProductEntity, 'id'>
-const productSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    price: { type: Number, required: true }
-});
+@Entity({ tableName: 'products' })
+export class Product {
+    @PrimaryKey({ type: 'uuid' })
+    id: string = v4()
 
-const Product = mongoose.model<Omit<ProductEntity, 'id'>>("Product", productSchema);
-export default Product;
+    @Property()
+    title!: string
+
+    @Property()
+    description!: string
+
+    @Property()
+    price!: number
+
+    constructor (title: string, description: string, price: number, id?: string) {
+        this.title = title;
+        this.description = description;
+        this.price = price;
+
+        if (id) this.id = id;
+    }
+}

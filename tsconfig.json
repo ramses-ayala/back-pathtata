@@ -12,4 +12,7 @@
   },
   "include": ["src/**/*"],
   "files": ["src/types/express.d.ts"],
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true,
+  "esModuleInterop": true
 }

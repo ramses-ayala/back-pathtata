@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { createProductService, deleteProductService, getAllProductsService, getProductByIdService, updateProductService } from "../../services/products/product.service"
+import { createProductService, getAllProductsService, getProductByIdService, deleteProductService, updateProductService } from "../../services/products/product.service"
 import Joi from "joi";
 
 export const getAllProductsController = async (_: Request, res: Response) => {
@@ -52,6 +52,7 @@ export const createProductController = async (req: Request, res: Response) => {
             data: createdProduct
         });
     } catch (error) {
+        console.error('error: ', error);
         const myError = error as Joi.ValidationError;
         if (myError.isJoi) {
             res.status(400).json({

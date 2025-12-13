@@ -1,5 +1,5 @@
 import { ProductEntity } from "../../entities/product.entity";
-import { createProductRepository, deleteProductByIdRepository, getAllProductsRepository, getProductByIdRepository, updateProductRepository } from "../../repositories/products/product.repository";
+import { createProductRepository, getAllProductsRepository, getProductByIdRepository, deleteProductByIdRepository, updateProductRepository } from "../../repositories/products/product.repository";
 import { createProductSchema, updateProductSchema } from "../../test/helpers/schemas";
 import Joi from "joi";
 
