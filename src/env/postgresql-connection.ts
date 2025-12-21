@@ -11,16 +11,17 @@
 
 // Local development
 
-// export const DB_USER = 'postgres';
-// export const DB_PASSWORD = 'root';
-// export const DB_NAME = 'node_gmp';
-// export const DB_HOST = 'localhost';
-// export const DB_PORT = 5432;
+export const DB_USER = 'postgres';
+export const DB_PASSWORD = 'root';
+export const DB_NAME = 'node_gmp';
+export const DB_HOST = 'localhost';
+export const DB_PORT = 5432;
+export const SECRET_KEY = 'MY_SECRET_KEY';
 
 // Autocode
 
-export const DB_USER = 'postgres';
+/* export const DB_USER = 'postgres';
 export const DB_PASSWORD = 'postgres';
 export const DB_NAME = 'postgres';
 export const DB_HOST = 'localhost';
-export const DB_PORT = 5432;
+export const DB_PORT = 5432; */

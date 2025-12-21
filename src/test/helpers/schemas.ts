@@ -9,11 +9,22 @@ export const createUserResponseSchema = Joi.object({
   error: Joi.allow(null),
 });
 
+export const createUserSchema = Joi.object({
+  email: Joi.string().email({ minDomainSegments: 1, tlds: { allow: ['com'] } }).required(),
+  password: Joi.string().min(10).required(),
+  role: Joi.string().valid('admin', 'user').required()
+});
+
 export const loginUserResponseSchema = Joi.object({
   data: Joi.object({
     token: Joi.string().required(),
   }),
   error: Joi.allow(null),
+});
+
+export const authenticateUserSchema = Joi.object({
+  email: Joi.string().email({ minDomainSegments: 1, tlds: { allow: ['com'] } }).required(),
+  password: Joi.string().required()
 });
 
 export const registerUserSchema = Joi.object({
