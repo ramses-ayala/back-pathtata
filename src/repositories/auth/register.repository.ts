@@ -16,7 +16,7 @@ export async function findUserByEmail (email: string): Promise<UserEntity | null
     return await em.findOne(User, { email: email });
 }
 
-export async function registerUserRepository (user: Omit<UserEntity, 'id'>): Promise<UserEntity> {
+export async function registerUserRepository (user: Omit<UserEntity, 'id'>): Promise<Omit<UserEntity, 'password'>> {
     const { email, password, role } = user;
 
     const newUser = new User(email, password, role);
@@ -24,5 +24,9 @@ export async function registerUserRepository (user: Omit<UserEntity, 'id'>): Pro
     const em = entityManager.fork();
     await em.persist(newUser).flush();
 
-    return newUser;
+    return {
+        id: newUser.id,
+        email: newUser.email,
+        role: newUser.role
+    };
 }

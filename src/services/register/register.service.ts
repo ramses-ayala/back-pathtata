@@ -10,7 +10,7 @@ export class EmailAlreadyExistsError extends Error {
     }
 }
 
-export async function registerUserService (user: Omit<UserEntity, 'id'>): Promise<UserEntity | Joi.ValidationError> {
+export async function registerUserService (user: Omit<UserEntity, 'id'>): Promise<Omit<UserEntity, 'password'> | Joi.ValidationError> {
     const { error, value } = createUserSchema.validate(user);
 
     if (error) throw error;

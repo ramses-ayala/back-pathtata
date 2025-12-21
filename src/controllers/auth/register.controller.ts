@@ -6,7 +6,7 @@ export const registerController = async (req: Request, res: Response) => {
     const { body } = req;
     try {
         const registeredUser = await registerUserService(body);
-        res.status(201).json({ "data": registeredUser });
+        res.status(201).json({ "data": registeredUser, error: null });
     } catch (error) {
         console.error("Ocurred an error signing up this user: ", error);
 

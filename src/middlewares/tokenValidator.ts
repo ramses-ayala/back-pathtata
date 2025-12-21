@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../env/postgresql-connection";
-import { emailAlreadyExists, findUserByEmail } from "../repositories/auth/register.repository";
+import { findUserByEmail } from "../repositories/auth/register.repository";
 import { UserEntity } from "../entities/user.entity";
 
 export const tokenValidator = async (req: Request, res: Response ,next: Function) => {

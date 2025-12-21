@@ -10,8 +10,8 @@ export const createUserResponseSchema = Joi.object({
 });
 
 export const createUserSchema = Joi.object({
-  email: Joi.string().email({ minDomainSegments: 1, tlds: { allow: ['com'] } }).required(),
-  password: Joi.string().min(10).required(),
+  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'admin'] } }).required(),
+  password: Joi.string().required(),
   role: Joi.string().valid('admin', 'user').required()
 });
 
@@ -23,7 +23,7 @@ export const loginUserResponseSchema = Joi.object({
 });
 
 export const authenticateUserSchema = Joi.object({
-  email: Joi.string().email({ minDomainSegments: 1, tlds: { allow: ['com'] } }).required(),
+  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'admin'] } }).required(),
   password: Joi.string().required()
 });
 
