@@ -4,8 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start:dev": "nodemon ./src/server.ts",
-    "start": "npm run build && ./node_modules/.bin/pm2 start ./dist/src/server.js --name node-js-express-application",
+    "start:dev": "NODE_ENV=test nodemon ./src/server.ts",
+    "start": "npm run build && NODE_ENV=production ./node_modules/.bin/pm2 start ./dist/src/server.js --name node-js-express-application",
     "stop": "./node_modules/.bin/pm2 delete node-js-express-application",
     "build": "mkdir -p dist && cp package.json dist/ && tsc",
     "test": "jest",
@@ -16,7 +16,7 @@
     "test:module-10-production-ready-app": "jest --testPathPattern=./src/test/module-10-production-ready-app",
     "run:db:migrations": "mikro-orm migration:up",
     "run:db:seeds": "mikro-orm seeder:run",
-    "pretest": "npm start && npm run:db:migrations && npm run:db:seeds",
+    "pretest": "npm start && NODE_ENV=production npm run:db:migrations && NODE_ENV=production npm run:db:seeds",
     "posttest": "npm stop",
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "npm run lint --fix"

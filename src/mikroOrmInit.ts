@@ -14,6 +14,7 @@ export async function initDB () {
         orm = await MikroORM.init(config);
     } catch (error) {
         console.error('Ocurred an error initiating DB !!! ', error);
+        process.exit(1);
     }
     return orm;
 }

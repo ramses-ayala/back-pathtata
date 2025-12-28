@@ -1,13 +1,20 @@
-import winston from 'winston';
-
+import { createLogger, format, transports } from 'winston';
+const { combine, timestamp, printf } = format;
 /**
- * TODO: Module 10 - Production-Ready Node.js Applications
  * Creates a logger instance with configurations specified in the application's config file.
  * Logs are outputted to the console.
  */
-const logger = {
-  // the line below is just a fix for TypeScript to compile properly until the logger is implemented
-  info: () => {},
-};
+
+const myFormat = printf(({ timestamp, level,message }) => {
+  return `${timestamp} [${level}]: ${message}`;
+});
+
+const logger = createLogger({
+  format: combine(
+    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    myFormat
+  ),
+  transports: [new transports.Console()]
+})
 
 export default logger;

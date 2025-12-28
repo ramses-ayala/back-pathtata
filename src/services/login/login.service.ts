@@ -18,8 +18,6 @@ export class PasswordDoesNotMatch extends Error {
 }
 
 export async function loginUserService (user: UserEntity): Promise<EmailDoesNotExist | PasswordDoesNotMatch | string> {
-    const entityManager = getEntityManager();
-    const em = entityManager.fork();
     const { error, value } = authenticateUserSchema.validate(user);
 
     if (error) throw error;
