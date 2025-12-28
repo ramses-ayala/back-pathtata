@@ -1,15 +1,15 @@
 import { defineConfig } from "@mikro-orm/postgresql";
 import { Product } from "./models/Product";
-import { config } from "./config";
+import { config_db } from "./config";
 import { User } from "./models/User";
 
 export default defineConfig ({
     entities: [Product, User],
-    dbName: config.database.name,
-    user: config.database.user,
-    password: config.database.password,
-    host: config.database.host,
-    port: config.database.port,
+    dbName: config_db.database.name,
+    user: config_db.database.user,
+    password: config_db.database.password,
+    host: config_db.database.host,
+    port: config_db.database.port,
     migrations: {
         path: './migrations'
     },

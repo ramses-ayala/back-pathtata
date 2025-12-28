@@ -11,7 +11,10 @@ dotenv.config({ path: path.resolve(__dirname, `../.env.${env}`) });
 export const config = {
     PORT: parseInt(process.env.PORT || '8000', 10),
     NODE_ENV: process.env.NODE_ENV || 'test',
-    LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
+    LOG_LEVEL: process.env.LOG_LEVEL || 'debug'
+};
+
+export const config_db = {
     database: {
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
@@ -19,8 +22,8 @@ export const config = {
         host: process.env.DB_HOST,
         port: parseInt(process.env.DB_PORT || '5432', 10),
     },
-    SECRET_KEY: process.env.SECRET_KEY,
-};
+    SECRET_KEY: process.env.SECRET_KEY
+}
 
 /**
  * Validates the presence of required environment variables.
@@ -30,13 +33,13 @@ export const validateEnv = () => {
     const requiredEnvVars = [
         'PORT',
         'NODE_ENV',
-        'LOG_LEVEL',
-        'DB_USER',
-        'DB_PASSWORD',
-        'DB_NAME',
-        'DB_HOST',
-        'DB_PORT',
-        'SECRET_KEY'
+        'LOG_LEVEL'
+        //'DB_USER',
+        // 'DB_PASSWORD',
+        // 'DB_NAME',
+        // 'DB_HOST',
+        // 'DB_PORT',
+        // 'SECRET_KEY'
     ];
 
     requiredEnvVars.forEach((envVar) => {
