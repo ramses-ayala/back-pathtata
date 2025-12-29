@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { SECRET_KEY } from "../env/postgresql-connection";
+import { config_db } from "../config";
 import { findUserByEmail } from "../repositories/auth/register.repository";
 import { UserEntity } from "../entities/user.entity";
 
@@ -16,7 +16,7 @@ export const tokenValidator = async (req: Request, res: Response ,next: Function
     }
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY as string) as Omit<UserEntity, 'password'>;
+        const decoded = jwt.verify(token, config_db.SECRET_KEY as string) as Omit<UserEntity, 'password'>;
         const userFound = await findUserByEmail(decoded.email);
 
         if (!userFound) {

@@ -10,12 +10,11 @@ const routes = Router();
 
 routes.get("/products", tokenValidator, getAllProductsController);
 routes.get("/products/:id", tokenValidator, getProductByIdController);
+routes.get("/health", checkHealthServer);
 routes.post("/auth/register", registerController);
 routes.post("/auth/login", loginController)
 routes.post("/products", tokenValidator, createProductController);
 routes.put("/products/:id", tokenValidator, updateProductController);
 routes.delete("/products/:id", tokenValidator, isAdmin, deleteProductController);
-
-routes.get("/health", checkHealthServer);
 
 export { routes };
