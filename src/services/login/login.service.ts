@@ -1,6 +1,5 @@
-import { UserEntity } from "../../entities/user.entity";
-import { getEntityManager } from "../../mikroOrmInit";
-import { isPasswordCorrect } from "../../repositories/auth/login.repository";
+import { responseUserLogin, UserEntity } from "../../entities/user.entity";
+import { getUserLogin, isPasswordCorrect } from "../../repositories/auth/login.repository";
 import { emailAlreadyExists } from "../../repositories/auth/register.repository";
 import { authenticateUserSchema } from "../../test/helpers/schemas";
 import { generateToken } from "../../utils/generateToken";
@@ -17,7 +16,7 @@ export class PasswordDoesNotMatch extends Error {
     }
 }
 
-export async function loginUserService (user: UserEntity): Promise<EmailDoesNotExist | PasswordDoesNotMatch | string> {
+export async function loginUserService (user: UserEntity): Promise<EmailDoesNotExist | PasswordDoesNotMatch | responseUserLogin> {
     const { error, value } = authenticateUserSchema.validate(user);
 
     if (error) throw error;
@@ -30,6 +29,15 @@ export async function loginUserService (user: UserEntity): Promise<EmailDoesNotE
 
     if (!isCorrectPassword) throw new PasswordDoesNotMatch();
 
+    const infoUser = await getUserLogin(value.email);
+    if (!infoUser) throw new EmailDoesNotExist(value.email);
+
     const token = generateToken(value);
-    return token;
+
+    return {
+        id: infoUser.id,
+        name: infoUser.name,
+        email: infoUser.email,
+        token
+    }
 }
