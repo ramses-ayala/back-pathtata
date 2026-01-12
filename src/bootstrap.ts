@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import { Socket } from 'net';
 import { Server } from 'http';
@@ -9,6 +10,12 @@ import { validateEnv, config } from './config';
 
 export const app = express();
 
+
+app.use(cors({ 
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(bodyParser.json());
 app.use(requestLogger);
 app.use('/api', routes);

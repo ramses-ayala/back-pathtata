@@ -9,8 +9,8 @@ export class UserSeeders extends Seeder {
         try {
             await em.nativeDelete(User, {});
             for (const user of users) {
-                const { email, password, role } = user;
-                const newUser = new User(email, password, role);
+                const { name, email, password } = user;
+                const newUser = new User(name, email, password);
                 myArrayUsers.push(newUser);
             }
             await em.persist(myArrayUsers).flush();
