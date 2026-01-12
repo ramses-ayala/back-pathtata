@@ -1,11 +1,13 @@
 import { Entity, Enum, PrimaryKey, Property, Unique } from "@mikro-orm/core";
 import { v4 } from "uuid";
-import { UserRole } from "../entities/user.entity";
 
 @Entity({ tableName: 'users' })
 export class User {
     @PrimaryKey({ type: 'uuid' })
     id: string = v4()
+
+    @Property()
+    name!: string
 
     @Property()
     @Unique()
@@ -14,13 +16,10 @@ export class User {
     @Property()
     password!: string
 
-    @Enum(() => UserRole)
-    role!: UserRole
-
-    constructor (email: string, password: string, role: UserRole, id?: string) {
+    constructor (name: string, email: string, password: string, id?: string) {
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.name = name;
 
         if (id) this.id = id;
     }

@@ -10,9 +10,9 @@ export const createUserResponseSchema = Joi.object({
 });
 
 export const createUserSchema = Joi.object({
+  name: Joi.string().required(),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'admin'] } }).required(),
-  password: Joi.string().required(),
-  role: Joi.string().valid('admin', 'user').required()
+  password: Joi.string().required()
 });
 
 export const loginUserResponseSchema = Joi.object({

@@ -17,16 +17,16 @@ export async function findUserByEmail (email: string): Promise<UserEntity | null
 }
 
 export async function registerUserRepository (user: Omit<UserEntity, 'id'>): Promise<Omit<UserEntity, 'password'>> {
-    const { email, password, role } = user;
+    const { name, email, password } = user;
 
-    const newUser = new User(email, password, role);
+    const newUser = new User(name, email, password);
     const entityManager = getEntityManager();
     const em = entityManager.fork();
     await em.persist(newUser).flush();
 
     return {
         id: newUser.id,
-        email: newUser.email,
-        role: newUser.role
+        name: newUser.name,
+        email: newUser.email
     };
 }

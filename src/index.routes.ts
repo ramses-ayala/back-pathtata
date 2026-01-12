@@ -3,7 +3,6 @@ import { createProductController, getAllProductsController, getProductByIdContro
 import { registerController } from './controllers/auth/register.controller';
 import { loginController } from './controllers/auth/login.controller';
 import { tokenValidator } from './middlewares/tokenValidator';
-import { isAdmin } from './middlewares/isAdmin';
 import { checkHealthServer } from './controllers/health/health.controller';
 
 const routes = Router();
@@ -15,6 +14,6 @@ routes.post("/auth/register", registerController);
 routes.post("/auth/login", loginController)
 routes.post("/products", tokenValidator, createProductController);
 routes.put("/products/:id", tokenValidator, updateProductController);
-routes.delete("/products/:id", tokenValidator, isAdmin, deleteProductController);
+routes.delete("/products/:id", tokenValidator, deleteProductController);
 
 export { routes };

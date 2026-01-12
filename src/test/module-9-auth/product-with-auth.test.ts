@@ -16,7 +16,6 @@ import {
   RANDOM_TOKEN,
   RANDOM_PRODUCT,
 } from '../helpers/constants';
-import { UserRole } from '../../entities/user.entity';
 
 let adminToken = '';
 let userToken = '';
@@ -25,9 +24,9 @@ describe('Authentication API', () => {
   describe('Register', () => {
     it('should register a new admin user', async () => {
       const newAdmin = {
+        name: 'admin',
         email: 'admin-new@admin.admin',
-        password: 'admin-new',
-        role: UserRole.ADMIN,
+        password: 'admin-new'
       };
 
       const { body } = await request(API_HOST)
@@ -41,9 +40,9 @@ describe('Authentication API', () => {
 
     it('should register a new user', async () => {
       const newUser = {
+        name: 'alex',
         email: 'alex@epam.com',
-        password: 'alex',
-        role: UserRole.USER,
+        password: 'alex'
       };
 
       const { body } = await request(API_HOST)
@@ -57,9 +56,9 @@ describe('Authentication API', () => {
 
     it('should return 400 when email is not valid', async () => {
       const newUser = {
+        name: 'invalid user',
         email: 'invalid_email',
-        password: 'password123',
-        role: UserRole.USER,
+        password: 'password123'
       };
 
       const { body } = await request(API_HOST)
@@ -73,8 +72,8 @@ describe('Authentication API', () => {
 
     it('should return 400 when some keys are missing in request body', async () => {
       const newUser = {
+        name: 'mike',
         email: 'mike@epam.com', // password is missing
-        role: UserRole.USER,
       };
 
       const { body } = await request(API_HOST)
@@ -88,9 +87,9 @@ describe('Authentication API', () => {
 
     it('should return 409 when user with such email already exists', async () => {
       const newUser = {
+        name: 'bob',
         email: 'bob@epam.com',
-        password: 'bob',
-        role: UserRole.USER,
+        password: 'bob'
       };
 
       const { body } = await request(API_HOST)
