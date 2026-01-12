@@ -7,6 +7,10 @@ export interface UserEntity {
   password: string;
 }
 
+export interface responseUserLogin extends Omit<UserEntity, 'password'> {
+  token: string
+}
+
 // const user: UserEntity = {
 //   id: '7ed47722-4381-4d60-8619-7cc867e1f7ae',
 //   email: 'admin@admin.admin',

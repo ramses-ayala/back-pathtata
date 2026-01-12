@@ -6,8 +6,8 @@ export const loginController = async (req: Request, res: Response) => {
     const { body } = req;
 
     try {
-        const token = await loginUserService(body);
-        res.status(200).json({ data:  { token }, error: null });
+        const data = await loginUserService(body);
+        res.status(200).json({ data: { ...data }, error: null });
     } catch (error) {
         console.error("Ocurred an error log in this user: ", error);
         const myError = error as Joi.ValidationError;
